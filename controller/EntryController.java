@@ -1,7 +1,8 @@
 package controller;
 
+import domain.Ticket;
 import domain.Vehicle;
-import java.util.UUID;
+import java.util.*;
 
 public class EntryController {
     private TicketService ticketService;
@@ -14,7 +15,21 @@ public class EntryController {
 
     // method
     public EntryResult enterVehicle(String licensePlate, Vehicle.VehicleType vehicleType) {
+        try {
+            Vehicle vehicle = new Vehicle(licensePlate, vehicleType);
 
+            Optional<UUID> slotId = slotService.allocateSlot(vehicleType).map(slot -> slot.getId());
+
+            if (slotId.isEmpty()) {
+                return new EntryResult(false, null, null, "No available slots for vehicle type" + vehicleType);
+            }
+
+            Ticket ticket = ticketService.generateTicket(vehicle, slotId.get());
+
+            return new EntryResult(true, ticket.getId(), slotId.get(), "Entry Successful");
+        } catch (Exception e) {
+            return new EntryResult(false, null, null, e.getMessage());
+        }
     }
 
     public class EntryResult {

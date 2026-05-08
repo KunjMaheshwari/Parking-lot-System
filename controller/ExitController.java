@@ -1,6 +1,10 @@
 package controller;
 
+import java.lang.classfile.ClassFile.Option;
 import java.util.*;
+
+import domain.Receipt;
+import domain.Ticket;
 
 public class ExitController {
     private TicketService ticketService;
@@ -20,7 +24,55 @@ public class ExitController {
     }
 
     public ExitResult exitVehicle(UUID ticketId) {
+        try {
+            Optional<Ticket> ticketOpt = ticketService.getTicket(ticketId);
+            if (ticketOpt.isEmpty()) {
+                return new ExitResult(false, null, 0.0, "Ticket not found");
+            }
 
+            Ticket ticket = ticketOpt.get();
+            if (!ticket.isActive()) {
+                return new ExitResult(false, null, 0.0, "Ticker is not active");
+            }
+
+            double fee = pricingService.calculateFee(ticket);
+
+            boolean paymentSuccess = paymentService.processPaymentWithRetry(ticketId, fee, 3);
+
+            if (!paymentSuccess) {
+                return new ExitResult(false, null, fee, "Payment failed");
+            }
+
+            Receipt receipt = receiptService.generateReceipt(ticket, fee);
+            receiptService.markReceiptAsPaid(receipt);
+
+            slotService.releaseSlot(ticket.getSlotId());
+
+            ticketService.deactiveTicket(ticketId);
+
+            return new ExitResult(true, receipt.getId(), fee, "Exit successful");
+        } catch (Exception e) {
+            return new ExitResult(false, null, 0.0, e.getMessage());
+        }
+    }
+
+    public String generateReceiptText(UUID ticketId){
+        try{
+            Optional<Ticket> ticketOpt = ticketService.getTicket(ticketId);
+            if(ticketOpt.isEmpty()){
+                return "Ticket not found";
+            }
+
+            Ticket ticket = ticketOpt.get();
+            double fee - pricingService.calculateFee(ticket);
+            Receipt receipt = receiptService.generateReceipt(ticket, fee);
+
+            String receiptText = receiptService.generateReceipt(receipt, ticket);
+
+            return receiptText;
+        }catch(Exception e){
+            return e.getMessage();
+        }
     }
 
     public class ExitResult {
