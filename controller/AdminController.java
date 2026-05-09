@@ -4,7 +4,7 @@ import java.util.*;
 
 import domain.PricingRule;
 import domain.Vehicle;
-import domain.Vehicle.VehicleType;
+import service.AdminService;
 
 public class AdminController {
     private AdminService adminService;
@@ -14,7 +14,7 @@ public class AdminController {
     }
 
     public void initializeParkingLot(){
-        adminService.intiliazeParkingLot();
+        adminService.initializeParkingLot();
     }
 
     public void addSlotsToFloor(int floorNumber, Vehicle.VehicleType sloType, int count){

@@ -2,6 +2,9 @@ package controller;
 
 import domain.Ticket;
 import domain.Vehicle;
+import service.SlotService;
+import service.TicketService;
+
 import java.util.*;
 
 public class EntryController {

@@ -1,10 +1,13 @@
 package controller;
-
-import java.lang.classfile.ClassFile.Option;
 import java.util.*;
 
 import domain.Receipt;
 import domain.Ticket;
+import service.PaymentService;
+import service.PricingService;
+import service.ReceiptService;
+import service.SlotService;
+import service.TicketService;
 
 public class ExitController {
     private TicketService ticketService;
@@ -67,7 +70,7 @@ public class ExitController {
             double fee = pricingService.calculateFee(ticket);
             Receipt receipt = receiptService.generateReceipt(ticket, fee);
 
-            String receiptText = receiptService.generateReceipt(receipt, ticket);
+            String receiptText = receiptService.generateReceiptText(receipt, ticket);
 
             return receiptText;
         }catch(Exception e){
