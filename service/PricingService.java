@@ -2,6 +2,7 @@ package service;
 
 import java.util.*;
 import domain.*;
+import repository.*;
 
 public class PricingService {
     private PricingRuleRepository pricingRuleRepository;

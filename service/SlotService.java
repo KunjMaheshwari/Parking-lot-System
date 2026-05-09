@@ -4,6 +4,7 @@ import java.util.*;
 
 import domain.ParkingSlot;
 import domain.Vehicle;
+import repository.*;
 
 
 public class SlotService {

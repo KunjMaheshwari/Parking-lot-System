@@ -3,6 +3,7 @@ package service;
 import domain.Ticket;
 import domain.Vehicle;
 import java.util.*;
+import repository.*;
 
 public class TicketService {
     private TicketRepository ticketRepository;
