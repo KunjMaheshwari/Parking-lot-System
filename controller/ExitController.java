@@ -64,7 +64,7 @@ public class ExitController {
             }
 
             Ticket ticket = ticketOpt.get();
-            double fee - pricingService.calculateFee(ticket);
+            double fee = pricingService.calculateFee(ticket);
             Receipt receipt = receiptService.generateReceipt(ticket, fee);
 
             String receiptText = receiptService.generateReceipt(receipt, ticket);
